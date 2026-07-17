@@ -29,7 +29,7 @@ const offerings = [
     title: "AI Agents Dev",
     body: "Autonomous AI agents, LLM integrations, and custom workflow automations that scale productivity.",
     color: "#4ea9fd",
-    img: "https://images.pexels.com/photos/17483868/pexels-photo-17483868.png?auto=compress&cs=tinysrgb&fit=crop&h=500&w=760",
+    img: "/images/ai-agents.jpg",
   },
 ];
 
