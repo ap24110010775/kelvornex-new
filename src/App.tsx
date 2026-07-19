@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import WhySection from "./components/WhySection";
-import Destinations from "./components/Destinations";
 import BookingSteps from "./components/ui/BookingSteps";
 import SubBrands from "./components/SubBrands";
 import ProgramDetail from "./components/ProgramDetail";
@@ -15,41 +13,47 @@ import CollegeMarquee from "./components/CollegeMarquee";
 import { CursorGlow } from "./components/ui/cursor-glow";
 import CoreValues from "./components/CoreValues";
 
-
 export default function App() {
   const [page, setPage] = useState<"home" | "details">("home");
-  const [blinkEdu, setBlinkEdu] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [showSplash, setShowSplash] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [activeBrand, setActiveBrand] = useState<"software" | "education" | "gadgets">("software");
 
+  const brandSectionRef = useRef<HTMLDivElement>(null);
 
   // scroll to top when switching pages
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, [page]);
 
-  const handleViewMoreClick = () => {
-    // Scroll down to the sub-brands section
-    const target = document.getElementById("our-brands-strip");
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
-    } else {
-      window.scrollTo({ top: document.body.scrollHeight - 1000, behavior: "smooth" });
-    }
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", isDarkMode ? "dark" : "light");
+  }, [isDarkMode]);
 
-    // Trigger blinking border highlight on the Education sub-brand
-    setBlinkEdu(true);
+  // Listen for brand-select events dispatched by the Navbar mega menu
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const brand = (e as CustomEvent).detail as "software" | "education" | "gadgets";
+      setActiveBrand(brand);
+      setPage("home"); // Reset back to home page so section is rendered
+    };
+    window.addEventListener("kelvornex-brand-select", handler);
+    return () => window.removeEventListener("kelvornex-brand-select", handler);
+  }, []);
+
+  const handleBrandSelect = (id: string) => {
+    setActiveBrand(id as "software" | "education" | "gadgets");
+    // Small delay so React re-renders the new section before we scroll
     setTimeout(() => {
-      setBlinkEdu(false);
-    }, 4500); // Blink for 4.5 seconds
+      brandSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
   };
-
-
 
   if (page === "details" && selectedItem) {
     return (
-      <ProgramDetail 
-        item={selectedItem} 
+      <ProgramDetail
+        item={selectedItem}
         onBack={() => {
           setPage("home");
           setTimeout(() => {
@@ -68,46 +72,45 @@ export default function App() {
     <>
       <CursorGlow />
       {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
-      <div className="min-h-screen">
-        <Navbar />
+      <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? "bg-slate-950 text-slate-100" : "bg-[#f8faff] text-slate-900"}`}>
+        <Navbar 
+          isDarkMode={isDarkMode} 
+          onToggleTheme={() => setIsDarkMode((prev) => !prev)} 
+          onHomeClick={() => setPage("home")}
+        />
         <main className="space-y-4">
-          {/* Hero is visible instantly at top */}
+          {/* Hero */}
           <Hero />
 
           <BookingSteps showOnlyHireTalents={true} />
 
-          <WhySection />
-
           <CoreValues />
 
-          <Destinations
-            onCourseClick={() => {
-              document.getElementById("education-section")?.scrollIntoView({ behavior: "smooth" });
-            }}
-            onViewMoreClick={handleViewMoreClick}
-          />
-
-          <BookingSteps showOnlyHireTalents={false} />
-
+          {/* Our Brands — tab strip */}
           <div id="our-brands-strip" className="hover-lift">
-            <SubBrands highlightEducation={blinkEdu} />
+            <SubBrands activeBrand={activeBrand} onBrandSelect={handleBrandSelect} />
           </div>
 
-          {/* New inline sections for the 3 sub-brands */}
-          <InlineSoftware />
+          {/* Brand content panel — only the active brand section is shown */}
+          <div ref={brandSectionRef}>
+            {activeBrand === "software" && <InlineSoftware />}
 
-          <InlineEducation
-            onProgramClick={(program: any) => {
-              setSelectedItem(program);
-              setPage("details");
-            }}
-          />
+            {activeBrand === "education" && (
+              <>
+                <InlineEducation
+                  onProgramClick={(program: any) => {
+                    setSelectedItem(program);
+                    setPage("details");
+                  }}
+                />
+                <CollegeMarquee />
+              </>
+            )}
 
-          <CollegeMarquee />
-
-          <InlineGadgets />
+            {activeBrand === "gadgets" && <InlineGadgets />}
+          </div>
         </main>
-        
+
         <Footer />
       </div>
     </>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface Logo {
@@ -15,6 +15,20 @@ interface MarqueeLogoScrollerProps extends React.HTMLAttributes<HTMLDivElement> 
 
 const MarqueeLogoScroller = React.forwardRef<HTMLDivElement, MarqueeLogoScrollerProps>(
   ({ title, description, logos, speed = 'normal', className, ...props }, ref) => {
+    const [isDarkMode, setIsDarkMode] = useState(false);
+
+    useEffect(() => {
+      const updateTheme = () => {
+        const theme = document.documentElement.getAttribute('data-theme');
+        setIsDarkMode(theme === 'dark');
+      };
+
+      updateTheme();
+      const observer = new MutationObserver(updateTheme);
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      return () => observer.disconnect();
+    }, []);
+
     const durationMap: Record<string, string> = {
       normal: '40s',
       slow: '80s',
@@ -34,14 +48,14 @@ const MarqueeLogoScroller = React.forwardRef<HTMLDivElement, MarqueeLogoScroller
         <section
           ref={ref}
           aria-label={title}
-          className={cn('w-full bg-background text-foreground rounded-lg border overflow-hidden', className)}
+          className={cn(`w-full rounded-lg border overflow-hidden ${isDarkMode ? 'bg-slate-950 text-white border-slate-800' : 'bg-white text-slate-900 border-slate-200'}`, className)}
           {...props}
         >
           {(title || description) && (
             <div className="p-6 md:p-8 lg:p-10">
-              <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6 lg:gap-8 pb-6 md:pb-8 border-b">
-                <h2 className="text-3xl md:text-4xl font-semibold tracking-tighter text-balance">{title}</h2>
-                <p className="text-muted-foreground self-start lg:justify-self-end text-balance">{description}</p>
+              <div className={`grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6 lg:gap-8 pb-6 md:pb-8 border-b ${isDarkMode ? 'border-slate-800' : 'border-slate-200'}`}>
+                <h2 className={`text-3xl md:text-4xl font-semibold tracking-tighter text-balance ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{title}</h2>
+                <p className={`self-start lg:justify-self-end text-balance ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>{description}</p>
               </div>
             </div>
           )}
@@ -59,7 +73,7 @@ const MarqueeLogoScroller = React.forwardRef<HTMLDivElement, MarqueeLogoScroller
               {[...logos, ...logos].map((logo, index) => (
                 <div
                   key={index}
-                  className="relative h-24 w-40 shrink-0 flex items-center justify-center rounded-xl bg-white/95 shadow-sm border border-slate-200 overflow-hidden"
+                  className={`relative h-24 w-40 shrink-0 flex items-center justify-center rounded-xl shadow-sm border overflow-hidden ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white/95 border-slate-200'}`}
                 >
                   <img src={logo.src} alt={logo.alt} className="h-16 w-auto object-contain" />
                 </div>

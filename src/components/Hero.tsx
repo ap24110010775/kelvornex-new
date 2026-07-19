@@ -41,19 +41,17 @@ export default function Hero() {
               {/* AnimatedTitle handles its own entrance animation */}
               <AnimatedTitle text="KELVORNEX" />
               <p className="mt-3 text-lagoon-400 font-bold tracking-[0.2em] sm:tracking-[0.3em] uppercase text-xs sm:text-sm md:text-base">
-                Learn. Execute. Succeed.
+                Software · Education · Products
               </p>
               <p className="mt-4 max-w-xl mx-auto md:mx-0 text-neutral-300 text-sm sm:text-base leading-relaxed">
-                Master in-demand skills with hands-on courses, real-world projects,
-                and mentor support — everything you need to launch your career in
-                one platform.
+                One platform — powerful software solutions, career-defining tech courses, and smart innovative products. Built to empower you.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center md:justify-start gap-3 sm:gap-4 max-w-xs sm:max-w-none mx-auto md:mx-0">
-                <a href="#enroll-newsletter" className="rounded-full bg-lagoon-500 hover:bg-lagoon-400 text-white text-sm sm:text-base font-bold px-7 py-3.5 text-center transition-colors shadow-lg shadow-lagoon-500/30">
-                  Start Learning
+                <a href="#our-brands-strip" className="rounded-full bg-lagoon-500 hover:bg-lagoon-400 text-white text-sm sm:text-base font-bold px-7 py-3.5 text-center transition-colors shadow-lg shadow-lagoon-500/30">
+                  Explore Our Brands
                 </a>
-                <a href="#courses" className="rounded-full border-2 border-neutral-100/80 text-white hover:bg-white/10 text-sm sm:text-base font-semibold px-7 py-3.5 text-center transition-colors backdrop-blur-sm">
-                  Explore Courses
+                <a href="#enroll-newsletter" className="rounded-full border-2 border-neutral-100/80 text-white hover:bg-white/10 text-sm sm:text-base font-semibold px-7 py-3.5 text-center transition-colors backdrop-blur-sm">
+                  Contact Us
                 </a>
               </div>
             </div>

@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import { FlutedGlass } from "@paper-design/shaders-react";
 import Logo from "./Logo";
 
@@ -31,12 +32,26 @@ const footerLinks = [
     ],
   },
   {
-    title: "Gadjust",
+    title: "Products",
     links: [], // custom coming soon notice rendered instead
   },
 ];
 
 export default function Footer() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const updateTheme = () => {
+      const theme = document.documentElement.getAttribute("data-theme");
+      setIsDarkMode(theme === "dark");
+    };
+
+    updateTheme();
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
+
   const handleScroll = (href: string) => {
     const targetId = href.replace("#", "");
     const element = document.getElementById(targetId);
@@ -46,10 +61,41 @@ export default function Footer() {
   };
 
   return (
-    <footer className="w-full bg-white relative overflow-hidden antialiased [font-synthesis:none]">
+    <footer className={`w-full relative overflow-hidden antialiased [font-synthesis:none] ${isDarkMode ? "bg-slate-950" : "bg-white"}`}>
+
+      {/* ── Ready to learn CTA Banner ── */}
+      <div id="enroll-newsletter" className="relative overflow-hidden bg-gradient-to-r from-plum-900 to-plum-700 px-5 py-12 sm:px-8 sm:py-16 md:px-20 text-center">
+        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-[#00ccff]/25 blur-2xl pointer-events-none" />
+        <div className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-[#ffe8f7]/10 blur-2xl pointer-events-none" />
+        <h2 className="relative text-2xl md:text-3xl lg:text-4xl font-bold text-white">
+          Ready to learn, execute, and succeed?
+        </h2>
+        <p className="relative mt-3 text-mint-100/80 text-sm max-w-lg mx-auto">
+          Join 15,000+ successful learners. Get exclusive course discounts and
+          career guides straight to your inbox.
+        </p>
+        <form
+          className="relative mt-7 flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <input
+            type="email"
+            required
+            placeholder="Enter your email address"
+            className="flex-1 rounded-full bg-white/95 px-5 py-3 text-sm text-plum-900 placeholder:text-sage-400 focus:outline-none focus:ring-2 focus:ring-[#00ccff]"
+          />
+          <button
+            type="submit"
+            className="rounded-full bg-[#00ccff] hover:bg-[#00ccff]/90 text-plum-900 text-sm font-bold px-7 py-3 transition-colors"
+          >
+            Subscribe
+          </button>
+        </form>
+      </div>
+
       {/* Large Stroke Text Section */}
       <div className="relative w-full flex justify-center items-end pt-16 md:pt-24 pb-0 z-0">
-        <h1 className="text-[8vw] sm:text-[10vw] md:text-[12vw] lg:text-[14vw] xl:text-[180px] font-extrabold text-transparent [-webkit-text-stroke:1px_rgba(0,0,0,0.4)] leading-[0.75] select-none -mb-3 md:-mb-5 opacity-40 uppercase tracking-wider">
+        <h1 className={`text-[8vw] sm:text-[10vw] md:text-[12vw] lg:text-[14vw] xl:text-[180px] font-extrabold text-transparent leading-[0.75] select-none -mb-3 md:-mb-5 opacity-40 uppercase tracking-wider ${isDarkMode ? "[-webkit-text-stroke:1px_rgba(255,255,255,0.45)]" : "[-webkit-text-stroke:1px_rgba(0,0,0,0.4)]"}`}>
           {companyName}
         </h1>
       </div>
@@ -88,9 +134,9 @@ export default function Footer() {
           <div className="flex flex-col justify-between max-w-sm w-full">
             <div className="flex flex-col">
               {/* Logo */}
-              <div className="flex items-center gap-2 text-white mb-3">
-                <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white p-1 shadow-md">
-                  <Logo className="w-8 h-8" />
+              <div className="flex items-center gap-2 mb-3 text-white">
+                <span className={`inline-flex items-center justify-center w-10 h-10 rounded-xl p-1 shadow-md ${isDarkMode ? "bg-black" : "bg-white"}`}>
+                  <Logo className="w-8 h-8" color={isDarkMode ? "white" : "black"} />
                 </span>
                 <span className="flex items-baseline gap-0.5">
                   <span className="text-2xl font-extrabold tracking-tight text-white">
@@ -146,7 +192,7 @@ export default function Footer() {
                 <h3 className="text-white font-semibold text-lg md:text-xl">
                   {section.title}
                 </h3>
-                {section.title === "Gadjust" ? (
+                {section.title === "Products" ? (
                   <div className="flex flex-col gap-2">
                     <span className="inline-flex items-center gap-1.5 text-cyan-300 font-semibold text-sm animate-pulse">
                       <span className="w-2 h-2 rounded-full bg-cyan-300"></span>

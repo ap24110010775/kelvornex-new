@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Video,
   Award,
@@ -151,6 +152,20 @@ interface BookingStepsProps {
 }
 
 export default function BookingSteps({ showOnlyHireTalents = false }: BookingStepsProps) {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const updateTheme = () => {
+      const theme = document.documentElement.getAttribute('data-theme');
+      setIsDarkMode(theme === 'dark');
+    };
+
+    updateTheme();
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
+
   // Use the first 10 unique partners for the curved marquee
   const partners = marqueeCompanies.slice(0, 10).map((c) => c);
   // helper to create a tiny SVG data-url placeholder when src is not available
@@ -169,16 +184,16 @@ export default function BookingSteps({ showOnlyHireTalents = false }: BookingSte
         {/* Continuous Auto-scrolling Infinite Marquee Block */}
         <div className="text-center py-6 w-full">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0a2540]">
+            <h2 className={`text-3xl sm:text-4xl font-extrabold ${isDarkMode ? 'text-white' : 'text-[#0a2540]'}`}>
               OUR PARTNERS & <span className="bg-gradient-to-r from-emerald-400 to-emerald-200 bg-clip-text text-transparent">INDUSTRY COLLABORATION</span>
             </h2>
-            <p className="mt-2 text-xs sm:text-sm text-slate-500">
+            <p className={`mt-2 text-xs sm:text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
               Trusted collaborations with leading companies and design partners
             </p>
           </div>
           
           {/* Marquee Logo Scroller (seamless CSS marquee) */}
-          <div className="relative mt-8 w-full overflow-hidden bg-slate-50/80 border-y border-slate-100 py-12">
+          <div className={`relative mt-8 w-full overflow-hidden border-y py-12 ${isDarkMode ? 'bg-slate-950/90 border-slate-800' : 'bg-slate-50/80 border-slate-100'}`}>
             <MarqueeLogoScroller
               title=""
               description=""
@@ -187,49 +202,8 @@ export default function BookingSteps({ showOnlyHireTalents = false }: BookingSte
               className="px-6"
             />
 
-            <div className="absolute inset-y-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-white to-transparent pointer-events-none" />
-          </div>
-        </div>
-
-        {/* Microsoft Certification Block (Validate your skills with global standards) placed directly below Hire Talent */}
-        <div className="w-full bg-[#f8fafc] border-y border-slate-100 py-12 md:py-16 mt-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-[1fr_2.5fr] gap-8 md:gap-12 items-center text-left">
-            <div className="flex flex-col items-center md:items-start text-center md:text-left border-b md:border-b-0 md:border-r border-slate-200 pb-6 md:pb-0 md:pr-12">
-              {/* Microsoft colorful logo block using official colors: Red, Green, Blue, Yellow */}
-              <div className="grid grid-cols-2 gap-1.5 w-11 h-11 mb-4">
-                <span className="bg-[#F25022] rounded-sm" />
-                <span className="bg-[#7FBA00] rounded-sm" />
-                <span className="bg-[#01A4EF] rounded-sm" />
-                <span className="bg-[#FFB900] rounded-sm" />
-              </div>
-              <h3 className="text-lg font-bold text-[#0a2540]">Microsoft</h3>
-              <p className="text-xs font-extrabold text-[#0900ff] mt-1">Certified Partner</p>
-              <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-1">Authorized Technical Training</p>
-            </div>
-            
-            <div>
-              <h4 className="text-xl font-extrabold text-[#0a2540]">
-                Validate your skills with global standards
-              </h4>
-              <p className="mt-2 text-xs sm:text-sm text-slate-500 leading-relaxed">
-                Our specialized technical programs and curriculum align with Microsoft standards. Students receive industry-ratified validation recognized by technology companies globally.
-              </p>
-              
-              <div className="mt-6 grid sm:grid-cols-2 gap-4">
-                {[
-                  "Microsoft Curriculum Standards Alignment",
-                  "Official Industry-Vetted Project Work",
-                  "Globally Recognized Career Credentials",
-                  "Direct Path to Advanced Technical Roles",
-                ].map((bullet) => (
-                  <div key={bullet} className="flex items-center gap-2.5 text-xs text-slate-700 font-semibold">
-                    <span className="w-2 h-2 rounded-full bg-[#00ccff]" />
-                    {bullet}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <div className={`absolute inset-y-0 left-0 w-12 sm:w-24 bg-gradient-to-r ${isDarkMode ? 'from-slate-950 to-transparent' : 'from-white to-transparent'} pointer-events-none`} />
+            <div className={`absolute inset-y-0 right-0 w-12 sm:w-24 bg-gradient-to-l ${isDarkMode ? 'from-slate-950 to-transparent' : 'from-white to-transparent'} pointer-events-none`} />
           </div>
         </div>
 
@@ -384,36 +358,6 @@ export default function BookingSteps({ showOnlyHireTalents = false }: BookingSte
             </div>
           ))}
         </div>
-      </div>
-
-      {/* ── PART 4: Ready to learn CTA banner (labeled with id="enroll-newsletter" as target) ── */}
-      <div id="enroll-newsletter" className="mt-20 rounded-3xl bg-gradient-to-r from-plum-900 to-plum-700 px-5 py-10 sm:px-8 sm:py-12 md:px-14 text-center relative overflow-hidden">
-        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-[#00ccff]/25 blur-2xl" />
-        <div className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-[#ffe8f7]/10 blur-2xl" />
-        <h3 className="relative text-2xl md:text-3xl font-bold text-white">
-          Ready to learn, execute, and succeed?
-        </h3>
-        <p className="relative mt-3 text-mint-100/80 text-sm max-w-lg mx-auto">
-          Join 15,000+ successful learners. Get exclusive course discounts and
-          career guides straight to your inbox.
-        </p>
-        <form
-          className="relative mt-7 flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-          onSubmit={(e) => e.preventDefault()}
-        >
-          <input
-            type="email"
-            required
-            placeholder="Enter your email address"
-            className="flex-1 rounded-full bg-white/95 px-5 py-3 text-sm text-plum-900 placeholder:text-sage-400 focus:outline-none focus:ring-2 focus:ring-[#00ccff]"
-          />
-          <button
-            type="submit"
-            className="rounded-full bg-[#00ccff] hover:bg-[#00ccff]/90 text-plum-900 text-sm font-bold px-7 py-3 transition-colors"
-          >
-            Subscribe
-          </button>
-        </form>
       </div>
 
     </section>

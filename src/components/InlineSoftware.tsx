@@ -1,41 +1,91 @@
-import { Terminal, Smartphone, Cpu, Users, Briefcase, Trophy, Globe } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Terminal, Smartphone, Cpu, BarChart3, ShoppingCart, Cloud, Box, Layers } from "lucide-react";
 
 const ACCENT = "#0900ff";
 
 const stats = [
-  { icon: Users, value: "500+", label: "Happy Clients" },
-  { icon: Briefcase, value: "1200+", label: "Projects Delivered" },
-  { icon: Trophy, value: "15+", label: "Awards Won" },
-  { icon: Globe, value: "30+", label: "Countries Served" },
+  { value: "500+", label: "Happy Clients" },
+  { value: "1200+", label: "Projects Delivered" },
+  { value: "15+", label: "Awards Won" },
+  { value: "30+", label: "Countries Served" },
 ];
 
 const offerings = [
   {
     icon: Terminal,
-    title: "Web Dev",
-    body: "Custom web applications, responsive websites & enterprise portals built to engage and convert.",
+    title: "Web Development",
+    body: "Custom web apps, responsive sites & enterprise portals built to engage and convert.",
     color: "#0900ff",
-    img: "https://images.pexels.com/photos/6424583/pexels-photo-6424583.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=760",
+    img: "https://images.pexels.com/photos/6424583/pexels-photo-6424583.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
   },
   {
     icon: Smartphone,
-    title: "App Dev",
-    body: "Fluid, high-performance iOS, Android & cross-platform apps that scale with your customer base.",
+    title: "App Development",
+    body: "High-performance iOS, Android & cross-platform apps that scale with your user base.",
     color: "#00ccff",
-    img: "https://images.pexels.com/photos/14979013/pexels-photo-14979013.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=500&w=760",
+    img: "https://images.pexels.com/photos/14979013/pexels-photo-14979013.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
   },
   {
     icon: Cpu,
     title: "AI Agents Dev",
-    body: "Autonomous AI agents, LLM integrations, and custom workflow automations that scale productivity.",
+    body: "Autonomous AI agents, LLM integrations, and workflow automations that boost productivity.",
     color: "#4ea9fd",
-    img: "/images/ai-agents.jpg",
+    img: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
+  },
+  {
+    icon: Box,
+    title: "Product Management",
+    body: "End-to-end product strategy, roadmapping, and delivery aligned to your business goals.",
+    color: "#7c3aed",
+    img: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
+  },
+  {
+    icon: Layers,
+    title: "Embedded Systems & IoT",
+    body: "Smart hardware integration, firmware development & IoT connectivity solutions.",
+    color: "#059669",
+    img: "https://images.pexels.com/photos/159201/circuit-circuit-board-resistor-computer-159201.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
+  },
+  {
+    icon: Cloud,
+    title: "Cloud Computing",
+    body: "Scalable cloud infrastructure, DevOps pipelines & managed services on AWS, Azure & GCP.",
+    color: "#0ea5e9",
+    img: "https://images.pexels.com/photos/1181354/pexels-photo-1181354.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
+  },
+  {
+    icon: ShoppingCart,
+    title: "E-Commerce Development",
+    body: "Feature-rich online stores with seamless payment gateways, inventory & order management.",
+    color: "#f59e0b",
+    img: "https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
+  },
+  {
+    icon: BarChart3,
+    title: "Business Analytics",
+    body: "Data-driven dashboards, BI reports & predictive analytics that turn data into decisions.",
+    color: "#ef4444",
+    img: "https://images.pexels.com/photos/7947541/pexels-photo-7947541.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
   },
 ];
 
 export default function InlineSoftware() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const updateTheme = () => {
+      const theme = document.documentElement.getAttribute("data-theme");
+      setIsDarkMode(theme === "dark");
+    };
+
+    updateTheme();
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="software-section" className="py-20 bg-slate-50 overflow-hidden">
+    <section id="software-section" className={`py-20 overflow-hidden transition-colors duration-300 ${isDarkMode ? "bg-slate-950" : "bg-slate-50"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}
@@ -43,48 +93,54 @@ export default function InlineSoftware() {
           <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#0900ff]">
             KELVORNEX SOFTWARE
           </p>
-          <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0a2540] tracking-tight">
-            Innovating Today, <span style={{ color: ACCENT }}>Inspiring Tomorrow</span>
+          <h2 className={`mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight transition-colors duration-300 ${isDarkMode ? "text-white" : "text-[#0a2540]"}`}>
+            Innovating Today,{" "}
+            <span style={{ color: ACCENT }}>Inspiring Tomorrow</span>
           </h2>
-          <p className="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed">
-            We deliver enterprise-grade software solutions, mobile applications, and autonomous AI agents designed to scale your operations.
+          <p className={`mt-4 text-sm sm:text-base leading-relaxed ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}>
+            Enterprise-grade software, AI solutions, and digital products engineered to scale your business.
           </p>
         </div>
 
-        {/* Offerings Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
+        {/* Offerings Grid — full-image cards */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {offerings.map((o) => {
             const Icon = o.icon;
             return (
               <div
                 key={o.title}
-                className="bg-white rounded-xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group"
+                className="relative h-72 rounded-2xl overflow-hidden group cursor-pointer shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
               >
-                <div>
-                  <div className="aspect-[16/10] overflow-hidden bg-slate-50 relative">
-                    <img
-                      src={o.img}
-                      alt={o.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
-                  </div>
-                  <div className="p-6 sm:p-8">
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center text-white mb-5 transition-transform duration-300 group-hover:scale-110"
-                      style={{ backgroundColor: o.color }}
-                    >
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#0900ff] transition-colors">
-                      {o.title}
-                    </h3>
-                    <p className="mt-3 text-sm text-slate-500 leading-relaxed">{o.body}</p>
-                  </div>
+                {/* Full background image */}
+                <img
+                  src={o.img}
+                  alt={o.title}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  loading="lazy"
+                />
+                {/* Dark gradient overlay — heavier at bottom */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
+
+                {/* Icon badge top-left */}
+                <div
+                  className="absolute top-4 left-4 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
+                  style={{ backgroundColor: o.color }}
+                >
+                  <Icon className="w-5 h-5 text-white" />
                 </div>
-                <div className="mx-6 sm:mx-8 mb-6 sm:mb-8 pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-400 group-hover:text-slate-900 transition-colors">
+
+                {/* Text overlay at bottom */}
+                <div className="absolute bottom-0 inset-x-0 p-5">
+                  <h3 className="text-white font-bold text-base leading-tight">
+                    {o.title}
+                  </h3>
+                  <p className="mt-2 text-white/70 text-xs leading-relaxed line-clamp-2 group-hover:text-white/90 transition-colors">
+                    {o.body}
+                  </p>
+                  <span
+                    className="mt-3 inline-block text-[11px] font-bold tracking-wide uppercase transition-colors"
+                    style={{ color: o.color }}
+                  >
                     Learn More →
                   </span>
                 </div>
@@ -94,42 +150,13 @@ export default function InlineSoftware() {
         </div>
 
         {/* Stats strip */}
-        <div className="mt-16 bg-white rounded-2xl border border-slate-100 shadow-md p-6 sm:p-8 grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10">
-          {stats.map(({ icon: Icon, value, label }) => (
-            <div
-              key={label}
-              className="flex items-center gap-4 border-r border-slate-100 last:border-r-0"
-            >
-              <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-600 shrink-0">
-                <Icon className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-xl sm:text-2xl font-extrabold text-[#0a2540]">{value}</p>
-                <p className="text-slate-500 text-xs sm:text-sm font-medium">{label}</p>
-              </div>
+        <div className={`mt-14 rounded-2xl border shadow-md p-6 sm:p-8 grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10 transition-colors duration-300 ${isDarkMode ? "bg-slate-900 border-slate-800" : "bg-white border-slate-100"}`}>
+          {stats.map(({ value, label }) => (
+            <div key={label} className={`text-center border-r last:border-r-0 ${isDarkMode ? "border-slate-800" : "border-slate-100"}`}>
+              <p className={`text-2xl sm:text-3xl font-extrabold transition-colors duration-300 ${isDarkMode ? "text-white" : "text-[#0a2540]"}`}>{value}</p>
+              <p className={`mt-1 text-xs sm:text-sm font-medium transition-colors duration-300 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>{label}</p>
             </div>
           ))}
-        </div>
-
-        {/* Bottom CTA block */}
-        <div
-          className="mt-16 bg-[#0a0e1a] rounded-2xl p-8 sm:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8"
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(9,0,255,0.15),transparent_50%)]" />
-          <div className="relative z-10 max-w-xl text-center md:text-left">
-            <h3 className="text-white text-2xl sm:text-3xl font-extrabold">Ready to build your solution?</h3>
-            <p className="mt-3 text-slate-400 text-sm sm:text-base">
-              Get in touch with our engineering team today to discuss details, timeline, and custom quotes.
-            </p>
-          </div>
-          <div className="relative z-10 shrink-0">
-            <a
-              href="#enroll-newsletter"
-              className="inline-flex items-center justify-center rounded-lg text-white font-bold px-8 py-4 bg-[#0900ff] hover:bg-[#008eff] shadow-lg shadow-blue-500/25 transition-all duration-200 active:scale-95 text-sm sm:text-base"
-            >
-              Get in Touch
-            </a>
-          </div>
         </div>
 
       </div>

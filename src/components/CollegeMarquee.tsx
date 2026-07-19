@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Marquee } from "@/components/ui/marquee";
 
 const colleges = [
@@ -11,13 +12,13 @@ const colleges = [
   { name: "JNTU Kakinada", domain: "jntuk.edu.in" },
 ];
 
-function CollegeLogo({ college }: { college: { name: string; domain: string } }) {
+function CollegeLogo({ college, isDarkMode }: { college: { name: string; domain: string }; isDarkMode: boolean }) {
   return (
-    <div className="relative flex items-center justify-center w-80 h-36 p-5 bg-white rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.04)] border border-slate-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer group">
+    <div className={`relative flex flex-col items-center justify-center w-96 h-52 p-6 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.04)] border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer group ${isDarkMode ? "bg-slate-900 border-slate-700" : "bg-white border-slate-100"}`}>
       <img
         src={`https://logo.clearbit.com/${college.domain}`}
         alt={college.name}
-        className="max-h-full max-w-full object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
+        className="w-40 h-24 object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-300"
         onError={(e) => {
           // If clearbit fails, fallback to google favicon
           const target = e.target as HTMLImageElement;
@@ -33,7 +34,7 @@ function CollegeLogo({ college }: { college: { name: string; domain: string } })
           }
         }}
       />
-      <div className="hidden text-center text-sm font-bold text-slate-800">
+      <div className="mt-3 text-center text-xs font-semibold text-slate-500 group-hover:text-slate-800 transition-colors">
         {college.name}
       </div>
     </div>
@@ -41,17 +42,31 @@ function CollegeLogo({ college }: { college: { name: string; domain: string } })
 }
 
 export default function CollegeMarquee() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const updateTheme = () => {
+      const theme = document.documentElement.getAttribute("data-theme");
+      setIsDarkMode(theme === "dark");
+    };
+
+    updateTheme();
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="relative py-24 bg-gradient-to-b from-white via-slate-50/50 to-white overflow-hidden">
+    <section className={`relative py-24 overflow-hidden ${isDarkMode ? "bg-slate-950" : "bg-gradient-to-b from-white via-slate-50/50 to-white"}`}>
       {/* Section Header */}
       <div className="max-w-3xl mx-auto text-center mb-16 px-4">
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#008eff]">
           Partner Institutions
         </p>
-        <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight">
+        <h2 className={`mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight ${isDarkMode ? "text-white" : "text-slate-900"}`}>
           Trusted by <span className="bg-gradient-to-r from-[#00ccff] to-[#008eff] bg-clip-text text-transparent">Top Colleges</span>
         </h2>
-        <p className="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed">
+        <p className={`mt-4 text-sm sm:text-base leading-relaxed ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}>
           Collaborating with prestigious institutions to empower the next generation of engineers and innovators.
         </p>
       </div>
@@ -60,13 +75,13 @@ export default function CollegeMarquee() {
       <div className="relative flex w-full flex-col items-center justify-center gap-4">
         <Marquee pauseOnHover className="[--duration:40s] [--gap:2rem]">
           {colleges.map((college) => (
-            <CollegeLogo key={college.domain} college={college} />
+            <CollegeLogo key={college.domain} college={college} isDarkMode={isDarkMode} />
           ))}
         </Marquee>
 
         {/* Side fade gradients */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-white to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-white to-transparent" />
+        <div className={`pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r ${isDarkMode ? "from-slate-950 to-transparent" : "from-white to-transparent"}`} />
+        <div className={`pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l ${isDarkMode ? "from-slate-950 to-transparent" : "from-white to-transparent"}`} />
       </div>
     </section>
   );

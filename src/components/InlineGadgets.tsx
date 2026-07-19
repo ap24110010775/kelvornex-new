@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { Bell, Mail, Check } from "lucide-react";
 
 const getTimeRemaining = (target: Date) => {
   const diff = Math.max(target.getTime() - Date.now(), 0);
@@ -14,9 +13,6 @@ const getTimeRemaining = (target: Date) => {
 const pad2 = (value: number) => String(value).padStart(2, "0");
 
 export default function InlineGadgets() {
-  const [email, setEmail] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
   const targetDate = useMemo(() => {
     const date = new Date();
     date.setDate(date.getDate() + 57);
@@ -32,16 +28,6 @@ export default function InlineGadgets() {
     }, 1000);
     return () => clearInterval(interval);
   }, [targetDate]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setEmail("");
-      setIsSubmitted(false);
-    }, 2000);
-  };
 
   const topBlocks = [
     { label: "DAYS", value: pad2(timeLeft.days) },
@@ -92,15 +78,16 @@ export default function InlineGadgets() {
             </div>
           </div>
 
-          <div className="relative px-8 pb-16 sm:px-12 sm:pb-20 lg:px-16 lg:pb-24">
-            <div className="absolute inset-x-0 -top-7 text-center text-[7rem] font-black uppercase tracking-[-0.15em] text-slate-200/50 leading-[0.9] pointer-events-none select-none md:text-[8rem] lg:text-[9.5rem] xl:text-[10.5rem] whitespace-nowrap">
-              COMING SOON
+          <div className="relative px-8 pb-16 sm:px-12 sm:pb-20 lg:px-16 lg:pb-24 overflow-hidden">
+            <div className="absolute inset-x-0 top-16 text-center text-[3.2rem] font-black uppercase tracking-[0.18em] text-slate-200/50 leading-[0.9] pointer-events-none select-none sm:text-[4rem] md:text-[5.2rem] lg:text-[6.4rem] xl:text-[7rem] whitespace-nowrap">
+              <span className="mr-4">COMING</span>
+              <span>SOON</span>
             </div>
 
             <div className="relative">
               <div className="mx-auto max-w-4xl text-center">
 
-                <div className="mt-21 grid items-end justify-center gap-4 sm:grid-cols-[auto_auto_auto_auto] sm:mt-23">
+                <div className="mt-24 grid grid-cols-2 items-end justify-center gap-4 sm:grid-cols-[auto_auto_auto_auto] sm:mt-24">
                   {topBlocks.map((block) => (
                     <div key={block.label} className="flex flex-col items-center gap-3">
                       <div className="rounded-[2rem] border border-slate-200 bg-slate-950 px-6 py-5 shadow-[0_25px_80px_rgba(15,23,45,0.12)]">
@@ -120,46 +107,6 @@ export default function InlineGadgets() {
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="relative mx-auto mt-10 max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-[2rem] bg-slate-950 px-8 py-8 text-white shadow-[0_40px_90px_rgba(15,23,45,0.12)] sm:px-12 sm:py-10">
-          <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.35em] text-cyan-300">Stay updated</p>
-              <h3 className="mt-4 text-2xl font-black tracking-tight text-white">Get early launch access and updates</h3>
-            </div>
-            <div>
-              {isSubmitted ? (
-                <div className="flex items-center justify-center gap-3 rounded-3xl border border-emerald-300/20 bg-emerald-500/10 px-6 py-4 text-sm font-bold text-emerald-300">
-                  <Check className="w-4 h-4" />
-                  Thank you! We''ll notify you shortly.
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
-                  <div className="relative flex-1">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
-                    <input
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      type="email"
-                      required
-                      placeholder="Enter your email"
-                      className="w-full rounded-full border border-slate-700 bg-slate-900/90 py-3.5 pl-12 pr-4 text-sm text-white outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="rounded-full bg-cyan-400 px-6 py-3.5 text-sm font-bold uppercase tracking-[0.2em] text-slate-950 transition hover:bg-cyan-300"
-                  >
-                    <Bell className="w-4 h-4 inline-block mr-2" />
-                    Notify Me
-                  </button>
-                </form>
-              )}
             </div>
           </div>
         </div>
