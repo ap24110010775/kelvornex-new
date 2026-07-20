@@ -1,36 +1,48 @@
-// src/components/ui/cursor-glow.tsx
-
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export function CursorGlow() {
-  const [position, setPosition] = useState({ x: -1000, y: -1000 });
+  const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let frameId: number;
+    let x = -500;
+    let y = -500;
     const handleMouseMove = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+      x = e.clientX;
+      y = e.clientY;
+      if (!frameId) {
+        frameId = requestAnimationFrame(() => {
+          if (glowRef.current) {
+            glowRef.current.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+          }
+          frameId = 0;
+        });
+      }
     };
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      if (frameId) cancelAnimationFrame(frameId);
     };
   }, []);
 
   return (
     <div
+      ref={glowRef}
       style={{
         position: "fixed",
-        left: position.x,
-        top: position.y,
-        width: "100px",
-        height: "100px",
+        left: 0,
+        top: 0,
+        width: "120px",
+        height: "120px",
         pointerEvents: "none",
         borderRadius: "50%",
-        transform: "translate(-50%, -50%)",
-        background: "radial-gradient(circle, rgba(0,204,255,0.15) 0%, transparent 70%)",
+        transform: "translate(-500px, -500px) translate(-50%, -50%)",
+        background: "radial-gradient(circle, rgba(0,204,255,0.12) 0%, transparent 70%)",
         mixBlendMode: "screen",
         zIndex: 9999,
+        willChange: "transform",
       }}
     />
   );
 }
-

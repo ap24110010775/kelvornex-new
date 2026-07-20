@@ -159,14 +159,12 @@ html[data-theme="dark"] .shadow-\[0_15px_50px_-15px_rgba\(0,0,0,0.1\)\] {
     stroke-dasharray: 900;
     stroke-dashoffset: 900;
     opacity: 0;
-    filter: blur(6px);
   }
   20% { opacity: 1; }
   100% {
     stroke-dasharray: 900;
     stroke-dashoffset: 0;
     opacity: 1;
-    filter: blur(0px);
   }
 }
 
@@ -174,17 +172,14 @@ html[data-theme="dark"] .shadow-\[0_15px_50px_-15px_rgba\(0,0,0,0.1\)\] {
   0% {
     opacity: 0;
     transform: scale(0.88) translateY(8px);
-    filter: blur(10px);
   }
   55% {
     opacity: 0.9;
     transform: scale(1.02) translateY(0px);
-    filter: blur(2px);
   }
   100% {
     opacity: 1;
     transform: scale(1) translateY(0px);
-    filter: blur(0px);
   }
 }
 
@@ -192,17 +187,14 @@ html[data-theme="dark"] .shadow-\[0_15px_50px_-15px_rgba\(0,0,0,0.1\)\] {
   0% {
     opacity: 0;
     transform: scale(0.2);
-    filter: blur(10px);
   }
   55% {
     opacity: 1;
     transform: scale(1.15);
-    filter: blur(1px);
   }
   100% {
     opacity: 1;
     transform: scale(1);
-    filter: blur(0px);
   }
 }
 
@@ -239,6 +231,7 @@ html[data-theme="dark"] .shadow-\[0_15px_50px_-15px_rgba\(0,0,0,0.1\)\] {
 
 .animate-marquee-logo {
   animation: marquee-logo 30s linear infinite;
+  will-change: transform;
 }
 
 .animate-marquee-logo:hover {
@@ -247,10 +240,12 @@ html[data-theme="dark"] .shadow-\[0_15px_50px_-15px_rgba\(0,0,0,0.1\)\] {
 
 .animate-marquee {
   animation: marquee-scroll var(--duration, 40s) linear infinite;
+  will-change: transform;
 }
 
 .animate-marquee-vertical {
   animation: marquee-vertical-scroll var(--duration, 40s) linear infinite;
+  will-change: transform;
 }
 
 .animate-float {
@@ -298,10 +293,21 @@ html[data-theme="dark"] .shadow-\[0_15px_50px_-15px_rgba\(0,0,0,0.1\)\] {
 
 /* smooth hover utilities */
 .hover-lift {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hover-lift:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
+}
+
+/* Performance: limit style recalculation scope per section — 
+   Note: avoid 'layout' contain as it breaks sticky/fixed descendants */
+section {
+  contain: style paint;
+}
+
+/* Reduce paint area for fixed overlays */
+.cursor-glow-fixed {
+  contain: strict;
 }
 
