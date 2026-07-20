@@ -11,24 +11,24 @@ const footerLinks = [
     links: [
       { name: "About Us", href: "#about-us" },
       { name: "Courses", href: "#education-section" },
-      { name: "Blog", href: "#" },
-      { name: "Contact", href: "#" },
+      { name: "Careers", href: "#careers" },
+      { name: "Contact", href: "#contact" },
     ],
   },
   {
     title: "Software",
     links: [
-      { name: "Web Dev", href: "#software-section" },
-      { name: "App Dev", href: "#software-section" },
-      { name: "AI Agents Dev", href: "#software-section" },
+      { name: "Custom Software", href: "#software-section" },
+      { name: "Cloud Services", href: "#software-section" },
+      { name: "AI & ML Solutions", href: "#software-section" },
     ],
   },
   {
     title: "EduTech",
     links: [
-      { name: "Career Programs", href: "#education-section" },
-      { name: "All Courses", href: "#education-section" },
-      { name: "Certificates", href: "#education-section" },
+      { name: "Full-Stack Web Dev", href: "#education-section" },
+      { name: "Data Science & AI", href: "#education-section" },
+      { name: "Agentic AI Cohort", href: "#education-section" },
     ],
   },
   {
@@ -53,45 +53,46 @@ export default function Footer() {
   }, []);
 
   const handleScroll = (href: string) => {
+    if (href === "#careers") {
+      window.dispatchEvent(new CustomEvent("kelvornex-open-careers"));
+      return;
+    }
+    if (href === "#contact") {
+      window.dispatchEvent(new CustomEvent("kelvornex-open-contact"));
+      return;
+    }
+
     const targetId = href.replace("#", "");
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    const brandMap: Record<string, "software" | "education" | "gadgets"> = {
+      "software-section": "software",
+      "education-section": "education",
+      "gadgets-section": "gadgets",
+    };
+    const brand = brandMap[targetId];
+
+    if (brand) {
+      window.dispatchEvent(new CustomEvent("kelvornex-brand-select", { detail: brand }));
+      setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 150);
+    } else {
+      // Go to home page default brand (software) and scroll to section (e.g. about-us)
+      window.dispatchEvent(new CustomEvent("kelvornex-brand-select", { detail: "software" }));
+      setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 150);
     }
   };
 
   return (
     <footer className={`w-full relative overflow-hidden antialiased [font-synthesis:none] ${isDarkMode ? "bg-slate-950" : "bg-white"}`}>
 
-      {/* ── Ready to learn CTA Banner ── */}
-      <div id="enroll-newsletter" className="relative overflow-hidden bg-gradient-to-r from-plum-900 to-plum-700 px-5 py-12 sm:px-8 sm:py-16 md:px-20 text-center">
-        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-[#00ccff]/25 blur-2xl pointer-events-none" />
-        <div className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-[#ffe8f7]/10 blur-2xl pointer-events-none" />
-        <h2 className="relative text-2xl md:text-3xl lg:text-4xl font-bold text-white">
-          Ready to learn, execute, and succeed?
-        </h2>
-        <p className="relative mt-3 text-mint-100/80 text-sm max-w-lg mx-auto">
-          Join 15,000+ successful learners. Get exclusive course discounts and
-          career guides straight to your inbox.
-        </p>
-        <form
-          className="relative mt-7 flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-          onSubmit={(e) => e.preventDefault()}
-        >
-          <input
-            type="email"
-            required
-            placeholder="Enter your email address"
-            className="flex-1 rounded-full bg-white/95 px-5 py-3 text-sm text-plum-900 placeholder:text-sage-400 focus:outline-none focus:ring-2 focus:ring-[#00ccff]"
-          />
-          <button
-            type="submit"
-            className="rounded-full bg-[#00ccff] hover:bg-[#00ccff]/90 text-plum-900 text-sm font-bold px-7 py-3 transition-colors"
-          >
-            Subscribe
-          </button>
-        </form>
-      </div>
 
       {/* Large Stroke Text Section */}
       <div className="relative w-full flex justify-center items-end pt-16 md:pt-24 pb-0 z-0">
@@ -155,15 +156,15 @@ export default function Footer() {
               <ul className="mt-5 flex flex-col gap-2 text-white/70 text-xs md:text-[13px]">
                 <li className="flex items-center gap-2">
                   <svg className="w-3.5 h-3.5 shrink-0 text-cyan-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z" /><path strokeLinecap="round" strokeLinejoin="round" d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20" /></svg>
-                  <a href="mailto:hello@domain.com" className="hover:text-white transition-colors">hello@domain.com</a>
+                  <a href="mailto:support@kelvornex.com" className="hover:text-white transition-colors">support@kelvornex.com</a>
                 </li>
                 <li className="flex items-center gap-2">
                   <svg className="w-3.5 h-3.5 shrink-0 text-cyan-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M22 16.92v3a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3.09 4.18 2 2 0 0 1 5.09 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L9.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 23 17z" /></svg>
-                  <a href="tel:+00123456789" className="hover:text-white transition-colors">+00 123 456 789</a>
+                  <a href="tel:+919347405443" className="hover:text-white transition-colors">+91 9347405443</a>
                 </li>
                 <li className="flex items-center gap-2">
                   <svg className="w-3.5 h-3.5 shrink-0 text-cyan-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
-                  <span>Founded 2025 &middot; Education &middot; 2–10 employees</span>
+                  <span>Founded 2025 &middot; Software, Education &amp; Products</span>
                 </li>
               </ul>
             </div>

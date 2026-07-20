@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Terminal, Smartphone, Cpu, BarChart3, ShoppingCart, Cloud, Box, Layers } from "lucide-react";
+import { Code2, Cloud, MonitorSmartphone, Database, Brain, ShieldCheck } from "lucide-react";
 
 const ACCENT = "#0900ff";
 
@@ -12,65 +12,64 @@ const stats = [
 
 const offerings = [
   {
-    icon: Terminal,
-    title: "Web Development",
-    body: "Custom web apps, responsive sites & enterprise portals built to engage and convert.",
+    id: "custom-software",
+    icon: Code2,
+    title: "Custom Software Development",
+    body: "Tailor-made software solutions engineered to your exact business requirements — from MVPs to enterprise platforms.",
     color: "#0900ff",
-    img: "https://images.pexels.com/photos/6424583/pexels-photo-6424583.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
+    img: "/custom_software_dev2.png",
   },
   {
-    icon: Smartphone,
-    title: "App Development",
-    body: "High-performance iOS, Android & cross-platform apps that scale with your user base.",
-    color: "#00ccff",
-    img: "https://images.pexels.com/photos/14979013/pexels-photo-14979013.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
-  },
-  {
-    icon: Cpu,
-    title: "AI Agents Dev",
-    body: "Autonomous AI agents, LLM integrations, and workflow automations that boost productivity.",
-    color: "#4ea9fd",
-    img: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
-  },
-  {
-    icon: Box,
-    title: "Product Management",
-    body: "End-to-end product strategy, roadmapping, and delivery aligned to your business goals.",
-    color: "#7c3aed",
-    img: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
-  },
-  {
-    icon: Layers,
-    title: "Embedded Systems & IoT",
-    body: "Smart hardware integration, firmware development & IoT connectivity solutions.",
-    color: "#059669",
-    img: "https://images.pexels.com/photos/159201/circuit-circuit-board-resistor-computer-159201.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
-  },
-  {
+    id: "cloud-services",
     icon: Cloud,
-    title: "Cloud Computing",
-    body: "Scalable cloud infrastructure, DevOps pipelines & managed services on AWS, Azure & GCP.",
-    color: "#0ea5e9",
-    img: "https://images.pexels.com/photos/1181354/pexels-photo-1181354.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
+    title: "Cloud Services",
+    body: "Scalable cloud infrastructure, DevOps pipelines & managed services on AWS, Azure & GCP tailored to your workload.",
+    color: "#00ccff",
+    img: "/cloud_services2.png",
   },
   {
-    icon: ShoppingCart,
-    title: "E-Commerce Development",
-    body: "Feature-rich online stores with seamless payment gateways, inventory & order management.",
+    id: "microsoft-services",
+    icon: MonitorSmartphone,
+    title: "Microsoft Services",
+    body: "Microsoft 365, Azure, Power Platform & Dynamics 365 integrations to modernise your enterprise operations.",
+    color: "#0078d4",
+    img: "/microsoft_services2.png",
+  },
+  {
+    id: "data-engineering",
+    icon: Database,
+    title: "Data Engineering",
+    body: "Robust data pipelines, warehousing, ETL workflows and real-time streaming solutions to fuel data-driven decisions.",
+    color: "#a855f7",
+    img: "/data_engineering2.png",
+  },
+  {
+    id: "ai-ml",
+    icon: Brain,
+    title: "AI & Machine Learning",
+    body: "Intelligent models, LLM integrations, predictive analytics and AI-powered automation built for real-world impact.",
     color: "#f59e0b",
-    img: "https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
+    img: "/ai_ml2.png",
   },
   {
-    icon: BarChart3,
-    title: "Business Analytics",
-    body: "Data-driven dashboards, BI reports & predictive analytics that turn data into decisions.",
+    id: "cyber-security",
+    icon: ShieldCheck,
+    title: "Cyber Security",
+    body: "End-to-end security assessments, threat detection, compliance frameworks and 24/7 monitoring to protect your assets.",
     color: "#ef4444",
-    img: "https://images.pexels.com/photos/7947541/pexels-photo-7947541.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=600&w=800",
+    img: "/cyber_security2.png",
   },
 ];
 
-export default function InlineSoftware() {
+
+
+interface InlineSoftwareProps {
+  onServiceClick?: (serviceId: string) => void;
+}
+
+export default function InlineSoftware({ onServiceClick }: InlineSoftwareProps) {
   const [isDarkMode, setIsDarkMode] = useState(false);
+
 
   useEffect(() => {
     const updateTheme = () => {
@@ -103,13 +102,14 @@ export default function InlineSoftware() {
         </div>
 
         {/* Offerings Grid — full-image cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {offerings.map((o) => {
             const Icon = o.icon;
             return (
               <div
                 key={o.title}
                 className="relative h-72 rounded-2xl overflow-hidden group cursor-pointer shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                onClick={() => onServiceClick?.(o.id)}
               >
                 {/* Full background image */}
                 <img

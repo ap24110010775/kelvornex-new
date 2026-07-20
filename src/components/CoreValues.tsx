@@ -40,7 +40,7 @@ export default function CoreValues() {
   }, []);
 
   return (
-    <section className={`w-full overflow-hidden ${isDarkMode ? "bg-slate-950" : "bg-[#fcfcfc]"}`}>
+    <section id="about-us" className={`w-full overflow-hidden ${isDarkMode ? "bg-slate-950" : "bg-[#fcfcfc]"}`}>
       {/* ── Background Banner (Kelvornex India 2026 Team Photo) ── */}
       <div className="relative w-full overflow-hidden">
         <img

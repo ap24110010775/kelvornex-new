@@ -72,8 +72,8 @@ export default function InlineGadgets() {
                 <div className="h-px w-12 bg-slate-200/40 rounded" />
               </div>
               <div className="text-right text-xs uppercase tracking-[0.2em] text-slate-500 space-y-1">
-                <div>+00 123 456 789</div>
-                <div>hello@domain.com</div>
+                <div>+91 9347405443</div>
+                <div>support@kelvornex.com</div>
               </div>
             </div>
           </div>

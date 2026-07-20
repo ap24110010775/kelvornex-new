@@ -267,8 +267,9 @@ export default function Navbar({ isDarkMode, onToggleTheme, onHomeClick }: Navba
                 {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </button>
 
-              <a
-                href="#enroll-newsletter"
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent("kelvornex-open-contact"))}
                 className={`rounded-full text-xs font-semibold px-5 py-2.5 transition-all duration-300 ${
                   isDarkTheme
                     ? "bg-white/10 hover:bg-white/20 text-white border border-white/20"
@@ -276,7 +277,7 @@ export default function Navbar({ isDarkMode, onToggleTheme, onHomeClick }: Navba
                 }`}
               >
                 Contact Us
-              </a>
+              </button>
             </div>
 
             {/* Mobile toggle */}
@@ -317,13 +318,13 @@ export default function Navbar({ isDarkMode, onToggleTheme, onHomeClick }: Navba
                   : { borderColor: "rgba(0,0,0,0.1)" }
               }
             >
-              <a
-                href="#enroll-newsletter"
+              <button
+                type="button"
                 className={mobileButtonClasses}
-                onClick={() => setOpen(false)}
+                onClick={() => { setOpen(false); window.dispatchEvent(new CustomEvent("kelvornex-open-contact")); }}
               >
                 Contact Us
-              </a>
+              </button>
             </div>
           </div>
         )}
@@ -459,6 +460,22 @@ export default function Navbar({ isDarkMode, onToggleTheme, onHomeClick }: Navba
 
           </div>
         )}
+      {activeLink?.name === "Careers" && (
+        <button
+          type="button"
+          aria-label="Apply"
+          className="absolute bottom-4 right-4 flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-all hover:opacity-90 hover:scale-105 active:scale-100"
+          style={{ background: "linear-gradient(135deg,#0900ff,#008eff)" }}
+          onClick={() => {
+            setIsDropdownVisible(false);
+            setTimeout(() => setActiveDropdown(null), 300);
+            window.dispatchEvent(new CustomEvent("kelvornex-open-careers"));
+          }}
+        >
+          Apply
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+        </button>
+      )}
       </div>
 
       {/* Backdrop overlay — subtle dimming of page content below */}

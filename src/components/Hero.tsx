@@ -2,12 +2,22 @@ import { Spotlight } from "./ui/spotlight";
 import { SplineScene } from "./ui/splite";
 import { AnimatedTitle } from "./ui/animated-title";
 import LogoRevealIntro from "./LogoRevealIntro";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 export default function Hero() {
   const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
   const [showRobot, setShowRobot] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <section id="home" className="w-full">
@@ -57,8 +67,8 @@ export default function Hero() {
             </div>
             {/* Right — Spline robot — always mounted so the heavy 3D bundle starts loading
                 during the logo animation; visually hidden until `showRobot` is true. */}
-            <motion.div
-              className="flex-1 w-full md:w-auto h-[400px] md:h-[calc(100vh-4rem)] relative"
+             <motion.div
+              className="flex-1 w-full md:w-auto h-[400px] md:h-[calc(100vh-4rem)] relative flex items-center justify-center"
               initial={{
                 opacity: 0,
                 scale: 0.7,
@@ -76,10 +86,18 @@ export default function Hero() {
               aria-hidden={!showRobot}
               style={{ pointerEvents: showRobot ? undefined : "none" }}
             >
-              <SplineScene
-                scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                className="w-full h-full"
-              />
+              {isMobile ? (
+                <img
+                  src="/custom_software_dev2.png"
+                  alt="Kelvornex Services"
+                  className="w-full max-w-sm h-64 object-cover rounded-2xl shadow-2xl opacity-80"
+                />
+              ) : (
+                <SplineScene
+                  scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+                  className="w-full h-full"
+                />
+              )}
             </motion.div>
           </div>
       </div>
