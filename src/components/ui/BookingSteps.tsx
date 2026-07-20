@@ -9,7 +9,7 @@ import {
   Star,
   ArrowRight,
 } from "lucide-react";
-import { MarqueeLogoScroller } from "../MarqueeLogoScroller";
+import MarqueeAlongSvgPath from "../MarqueeAlongSvgPath";
 
 // Repeated companies list for infinite continuous auto-scrolling marquee
 const marqueeCompanies = [
@@ -192,18 +192,41 @@ export default function BookingSteps({ showOnlyHireTalents = false }: BookingSte
             </p>
           </div>
           
-          {/* Marquee Logo Scroller (seamless CSS marquee) */}
-          <div className={`relative mt-8 w-full overflow-hidden border-y py-12 ${isDarkMode ? 'bg-slate-950/90 border-slate-800' : 'bg-slate-50/80 border-slate-100'}`}>
-            <MarqueeLogoScroller
-              title=""
-              description=""
-              logos={logos}
-              speed="normal"
-              className="px-6"
-            />
+          {/* Marquee Logo Scroller (straight line SVG marquee with larger logos) */}
+          <div className={`relative mt-8 w-full overflow-hidden border-y py-4 ${isDarkMode ? 'bg-slate-950/90 border-slate-900' : 'bg-slate-50/80 border-slate-100'}`}>
+            <MarqueeAlongSvgPath
+              path="M -250 100 L 1850 100"
+              viewBox="0 0 1600 200"
+              width="100%"
+              height="100%"
+              baseVelocity={2}
+              useScrollVelocity={true}
+              scrollAwareDirection={true}
+              slowdownOnHover={true}
+              draggable={true}
+              grabCursor={true}
+              responsive={true}
+              repeat={1}
+              className="w-full h-[120px] sm:h-[150px] md:h-[180px] lg:h-[200px]"
+            >
+              {logos.map((logo, index) => (
+                <div
+                  key={index}
+                  className={`relative h-28 w-48 shrink-0 flex items-center justify-center rounded-2xl shadow-sm border overflow-hidden p-6 ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'}`}
+                >
+                  <img
+                    src={logo.src}
+                    alt={logo.alt}
+                    className="h-14 w-auto object-contain select-none pointer-events-none"
+                    draggable="false"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </MarqueeAlongSvgPath>
 
-            <div className={`absolute inset-y-0 left-0 w-12 sm:w-24 bg-gradient-to-r ${isDarkMode ? 'from-slate-950 to-transparent' : 'from-white to-transparent'} pointer-events-none`} />
-            <div className={`absolute inset-y-0 right-0 w-12 sm:w-24 bg-gradient-to-l ${isDarkMode ? 'from-slate-950 to-transparent' : 'from-white to-transparent'} pointer-events-none`} />
+            <div className={`absolute inset-y-0 left-0 w-12 sm:w-24 bg-gradient-to-r ${isDarkMode ? 'from-slate-950 to-transparent' : 'from-white to-transparent'} pointer-events-none z-10`} />
+            <div className={`absolute inset-y-0 right-0 w-12 sm:w-24 bg-gradient-to-l ${isDarkMode ? 'from-slate-950 to-transparent' : 'from-white to-transparent'} pointer-events-none z-10`} />
           </div>
         </div>
 
